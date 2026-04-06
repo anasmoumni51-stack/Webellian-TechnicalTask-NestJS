@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { CatalogsService } from './catalogs.service';
 import { CreateCatalogDto } from './dto/create-catalog.dto';
 import { UpdateCatalogDto } from './dto/update-catalog.dto';
@@ -20,13 +20,13 @@ retrieveOneCatalog (@Param('id', ParseIntPipe) id: number) {
 
 
 @Post()
-createCatalog(@Body(ValidationPipe) catalogDTO: CreateCatalogDto ) {
+createCatalog(@Body() catalogDTO: CreateCatalogDto ) {
     return catalogDTO;
 }
 
 
 @Put(':id')
-updateCatalog(@Param('id', ParseIntPipe) id: number, @Body(ValidationPipe) updateCatalog: UpdateCatalogDto) {
+updateCatalog(@Param('id', ParseIntPipe) id: number, @Body() updateCatalog: UpdateCatalogDto) {
     return {id, updateCatalog};
 }
 

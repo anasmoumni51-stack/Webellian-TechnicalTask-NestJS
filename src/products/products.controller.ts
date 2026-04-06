@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -20,13 +20,13 @@ retrieveOneProduct (@Param('id', ParseIntPipe) id: number) {
 
 
 @Post()
-createProduct(@Body(ValidationPipe) productDto: CreateProductDto  ) {
+createProduct(@Body() productDto: CreateProductDto  ) {
     return productDto;
 }
 
 
 @Put(':id')
-updateProduct(@Param('id', ParseIntPipe) id: number, @Body(ValidationPipe) partialProductDto: UpdateProductDto) {
+updateProduct(@Param('id', ParseIntPipe) id: number, @Body() partialProductDto: UpdateProductDto) {
     return {id, partialProductDto};
 }
 
