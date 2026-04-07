@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  # The NestJS Backend API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webellian-api-prod
+    restart: always # Important for Dokploy auto-restart guarantees
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_HOST=${DATABASE_HOST} # Must be provided by Dokploy Database service name
+      - DATABASE_PORT=${DATABASE_PORT:-5432}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - CLIENT_URL=${CLIENT_URL:-https://your-domain.com} # Used for CORS
+    networks:
+      - dokploy-network # Standard dokploy reverse-proxy network
+    
+networks:
+  dokploy-network:
+    external: true
