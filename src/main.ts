@@ -16,14 +16,14 @@ async function bootstrap() {
 
   app.enableCors({ origin: process.env.CLIENT_URL || 'http://localhost:3000' });
 
-    const config = new DocumentBuilder()
+  const config = new DocumentBuilder()
     .setTitle('Webellian Technical Task Backend API')
     .setDescription('API documentation for the Catalogs & Products assignment')
     .setVersion('1.0')
     .addTag('Catalogs', 'Manage product catalogs')
     .addTag('Products', 'Manage products and assignments')
     .build();
-    
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('', app, document);
 

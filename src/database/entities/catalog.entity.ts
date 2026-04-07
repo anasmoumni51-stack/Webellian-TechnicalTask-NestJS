@@ -4,23 +4,39 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('catalogs')
 export class CatalogEntity {
-  @ApiProperty({ example: 1, description: 'The unique identifier of the catalog' })
+  @ApiProperty({
+    example: 1,
+    description: 'The unique identifier of the catalog',
+  })
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ApiProperty({ example: 'Gadget Collection', description: 'The name of the catalog' })
+  @ApiProperty({
+    example: 'Gadget Collection',
+    description: 'The name of the catalog',
+  })
   @Column()
   name!: string;
 
-  @ApiProperty({ example: 'A collection of gadget producs', description: 'Description of the catalog', required: false })
+  @ApiProperty({
+    example: 'A collection of gadget producs',
+    description: 'Description of the catalog',
+    required: false,
+  })
   @Column({ nullable: true })
   description!: string;
 
-  @ApiProperty({ example: true, description: 'if the catalog is currently active' })
+  @ApiProperty({
+    example: true,
+    description: 'if the catalog is currently active',
+  })
   @Column({ default: true })
   isActive!: boolean;
 
-  @ApiProperty({ type: () => [ProductEntity], description: 'Products associated with this catalog' })
+  @ApiProperty({
+    type: () => [ProductEntity],
+    description: 'Products associated with this catalog',
+  })
   @ManyToMany(() => ProductEntity, (product) => product.catalogs, {
     onDelete: 'CASCADE',
   })

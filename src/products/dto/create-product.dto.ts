@@ -9,17 +9,22 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { Unique } from 'typeorm';
 
 export class CreateProductDto {
-    
-@ApiProperty({ example: 'MacBook Pro', description: 'The title name of the product' })
+  @ApiProperty({
+    example: 'MacBook Pro',
+    description: 'The title name of the product',
+  })
   @IsString()
   @MinLength(2)
   @MaxLength(50)
   name!: string;
 
-  @ApiProperty({ example: 1999.99, description: 'Product price in any currency (Formatting not yet implemented)' })
+  @ApiProperty({
+    example: 1999.99,
+    description:
+      'Product price in any currency (Formatting not yet implemented)',
+  })
   @IsNumber()
   @Min(0)
   @Max(99999)
@@ -31,7 +36,11 @@ export class CreateProductDto {
   @MaxLength(200)
   description?: string = '';
 
-  @ApiProperty({ example: true, required: false, description: 'if the product is available in stock or not (optional)' })
+  @ApiProperty({
+    example: true,
+    required: false,
+    description: 'if the product is available in stock or not (optional)',
+  })
   @IsBoolean()
   @IsOptional()
   isAvailable?: boolean = true;
