@@ -1,14 +1,12 @@
 import {
   ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+  Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProductEntity } from './entity/product.entity';
 import { Repository } from 'typeorm';
 import { CatalogEntity } from 'src/catalogs/entity/catalog.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductEntity } from './entities/product.entity';
 
 @Injectable()
 export class ProductsService {

@@ -5,8 +5,8 @@ import { CatalogsModule } from './catalogs/catalogs.module';
 import { ProductsModule } from './products/products.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductEntity } from './products/entity/product.entity';
 import { CatalogEntity } from './catalogs/entity/catalog.entity';
+import { ProductEntity } from './products/entities/product.entity';
 
 @Module({
   imports: [
