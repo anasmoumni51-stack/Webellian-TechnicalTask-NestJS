@@ -1,4 +1,4 @@
-import { ProductEntity } from 'src/products/entity/product.entity';
+import { ProductEntity } from './product.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('catalogs')
@@ -15,6 +15,6 @@ export class CatalogEntity {
   @Column({ default: true })
   isActive!: boolean;
 
-  @ManyToMany(() => ProductEntity, (product) => product.catalogs)
+  @ManyToMany(() => ProductEntity, (product) => product.catalogs, {onDelete: 'CASCADE'})
   products!: ProductEntity[];
 }

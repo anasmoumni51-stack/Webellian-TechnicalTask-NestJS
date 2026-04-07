@@ -1,14 +1,14 @@
 services:
     postgres:
         image: postgres:16-alpine
-        container_name: webellian-postgres
+        container_name: technicaltask-postgres
         restart: unless-stopped
         volumes:
             - postgres_data:/var/lib/postgresql/data
         ports:
             - "5432:5432"
         environment:
-            POSTGRES_DB: ${DATABASE_NAME:-webellian_db}
+            POSTGRES_DB: ${DATABASE_NAME:-technicaltask_db}
             POSTGRES_USER: ${DATABASE_USER:-postgres}
             POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-postgres}
             POSTGRES_HOST_AUTH_METHOD: md5
@@ -20,7 +20,7 @@ services:
 
     adminer:
         image: adminer:latest
-        container_name: webellian-adminer
+        container_name: technicaltask-adminer
         restart: unless-stopped
         ports:
             - "8080:8080"

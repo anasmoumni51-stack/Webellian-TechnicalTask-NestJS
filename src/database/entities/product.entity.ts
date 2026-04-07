@@ -1,4 +1,4 @@
-import { CatalogEntity } from 'src/catalogs/entity/catalog.entity';
+import { CatalogEntity } from 'src/database/entities/catalog.entity';
 import {
   Column,
   Entity,
@@ -12,7 +12,7 @@ export class ProductEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ unique: true })
   name!: string;
 
   @Column({ type: 'decimal' })
@@ -24,7 +24,7 @@ export class ProductEntity {
   @Column({ default: true })
   isAvailable!: boolean;
 
-  @ManyToMany(() => CatalogEntity, (catalog) => catalog.products)
+  @ManyToMany(() => CatalogEntity, (catalog) => catalog.products, {onDelete: 'CASCADE'} )
   @JoinTable({ name: 'productsInCatalogs' })
   catalogs!: CatalogEntity[];
 }

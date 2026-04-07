@@ -3,10 +3,10 @@ import {
   Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CatalogEntity } from 'src/catalogs/entity/catalog.entity';
+import { CatalogEntity } from 'src/database/entities/catalog.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductEntity } from './entities/product.entity';
+import { ProductEntity } from '../database/entities/product.entity';
 
 @Injectable()
 export class ProductsService {
@@ -21,6 +21,7 @@ export class ProductsService {
     return await this.productRepo.find();
   }
 
+
   async findOne(id: number): Promise<ProductEntity> {
     const product = await this.productRepo.findOne({ where: { id: id } });
     if (!product) {
@@ -29,65 +30,54 @@ export class ProductsService {
     return product;
   }
 
+
   async create(createProductDto: CreateProductDto): Promise<ProductEntity> {
     const product = this.productRepo.create(createProductDto);
     return await this.productRepo.save(product);
   }
 
-  async update(
-    id: number,
-    updateProductDto: UpdateProductDto,
-  ): Promise<ProductEntity> {
+
+  async update(id: number, updateProductDto: UpdateProductDto): Promise<ProductEntity> {
     await this.findOne(id);
     await this.productRepo.update(id, updateProductDto);
     return await this.findOne(id);
   }
 
+
   async delete(id: number): Promise<ProductEntity> {
-    const deletedProduct = await this.findOne(id);
+    const deleteproduct = await this.findOne(id);
     await this.productRepo.delete(id);
-    return deletedProduct;
+    return deleteproduct; // deleted product is returned for confirmation 
   }
 
-  // both repositories should be called again because both services don't return relation tables by default for performance reasons;
 
-  async assignToCatalog(
-    productId: number,
-    catalogId: number,
-  ): Promise<ProductEntity> {
-    const product = await this.productRepo.findOne({
-      where: { id: productId },
-      relations: ['catalogs'],
-    });
-    if (!product) {
-      throw new NotFoundException(`Product with ID: ${productId} not found`);
-    }
 
-    const catalog = await this.catalogRepo.findOne({
-      where: { id: catalogId },
-    });
-    if (!catalog) {
-      throw new NotFoundException(`Catalog with ID: ${catalogId} not found`);
-    }
 
-    const alreadyAssigned = product.catalogs.find(
-      (catalog) => catalog.id === catalogId,
-    );
+// both repositories should be called again because both services don't return joined tables by default for performance reasons;
+  async assignToCatalog(productId: number, catalogId: number): Promise<ProductEntity> {
+    
+    const product = await this.productRepo.findOne({ where: { id: productId }, relations: ['catalogs'] });
+        if (!product) {
+            throw new NotFoundException(`Product with ID: ${productId} not found`);
+        }
 
-    if (alreadyAssigned) {
-      throw new ConflictException(
-        `Product with ID ${productId} is already assigned to catalog with ID: ${catalogId}`,
-      );
-    }
+    const catalog = await this.catalogRepo.findOne({ where: { id: catalogId } });
+        if (!catalog) {
+            throw new NotFoundException(`Catalog with ID: ${catalogId} not found`);
+        }
+
+    const alreadyAssigned = product.catalogs.find((catalog) => catalog.id === catalogId);
+
+        if (alreadyAssigned) {
+            throw new ConflictException(`Product with ID ${productId} is already assigned to catalog with ID: ${catalogId}`);
+        }
 
     product.catalogs.push(catalog);
     return await this.productRepo.save(product);
   }
 
-  async deleteFromCatalog(
-    productId: number,
-    catalogId: number,
-  ): Promise<ProductEntity> {
+  
+  async deleteFromCatalog(productId: number, catalogId: number): Promise<ProductEntity> {
     const product = await this.productRepo.findOne({
       where: { id: productId },
       relations: ['catalogs'],
@@ -95,9 +85,14 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException(`Product with ID: ${productId} not found`);
     }
-    product.catalogs = product.catalogs.filter(
-      (catalog) => catalog.id !== catalogId,
-    );
+
+    const alreadyAssigned = product.catalogs.find((catalog) => catalog.id === catalogId);
+        
+    if(!alreadyAssigned) {
+            throw new ConflictException(`Cannot Delete from Catalog: Product ID: ${productId} is not assigned to Catalog ID: ${catalogId}`)
+        }
+
+    product.catalogs = product.catalogs.filter( (catalog) => catalog.id !== catalogId);
     return await this.productRepo.save(product);
   }
 }

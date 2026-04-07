@@ -11,7 +11,7 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductEntity } from './entities/product.entity';
+import { ProductEntity } from '../database/entities/product.entity';
 
 @Controller('products')
 export class ProductsController {
