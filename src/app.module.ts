@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { CatalogsModule } from './catalogs/catalogs.module';
 import { ProductsModule } from './products/products.module';

@@ -7,7 +7,6 @@ import helmet from 'helmet';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -19,6 +18,7 @@ async function bootstrap() {
   app.use(helmet());
   app.enableCors({ origin: process.env.CLIENT_URL || 'http://localhost:3000' });
 
+  //Swagger Integration
   const config = new DocumentBuilder()
     .setTitle('Webellian Technical Task Backend API')
     .setDescription('API documentation for the Catalogs & Products assignment')
