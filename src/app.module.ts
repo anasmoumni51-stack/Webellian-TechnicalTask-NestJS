@@ -10,9 +10,9 @@ import { CatalogEntity } from './catalogs/entity/catalog.entity';
 
 @Module({
   imports: [
-    CatalogsModule, 
-    ProductsModule, 
-    ConfigModule.forRoot({ isGlobal:true, envFilePath: '.env',}),
+    CatalogsModule,
+    ProductsModule,
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

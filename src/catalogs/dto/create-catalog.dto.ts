@@ -1,18 +1,23 @@
-import { IsBoolean, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import {
+  IsBoolean,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateCatalogDto {
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  name!: string;
 
-    @IsString()
-    @MinLength(2)
-    @MaxLength(10)
-    name!: string;
+  @IsOptional()
+  @IsString()
+  @MaxLength(250)
+  description?: string = '';
 
-    @IsOptional()
-    @IsString()
-    @MaxLength(250)
-    description?: string = "";
-
-    @IsOptional()
-    @IsBoolean()
-    isActive?: boolean = true;
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean = true;
 }
