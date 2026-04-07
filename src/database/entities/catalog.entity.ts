@@ -15,6 +15,8 @@ export class CatalogEntity {
   @Column({ default: true })
   isActive!: boolean;
 
-  @ManyToMany(() => ProductEntity, (product) => product.catalogs, {onDelete: 'CASCADE'})
+  @ManyToMany(() => ProductEntity, (product) => product.catalogs, {
+    onDelete: 'CASCADE',
+  })
   products!: ProductEntity[];
 }
