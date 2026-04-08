@@ -173,13 +173,14 @@ Use .env.example as a baseline.
 - DATABASE_PORT # PORT 5432 by default
 - DATABASE_USER
 - DATABASE_PASSWORD
-- DATABASE_NAME # Should match
-- CLIENT_URL # for CORS Your domain name or http://localhost:3000 by default ( modify on main.ts )
+- DATABASE_NAME # should match Postgres DB name
+- CLIENT_URL # for CORS Your domain name or http://localhost:3000 default ( modify on main.ts )
 - PORT # Nest JS app deployement PORT Default 3000
 
 ## Development Notes
 
-- due to the time constraint on the project unit tests coverage is not very high and e2e & integration will be implemented.
+- i wanted to
 - Swagger is mounted at root path (/), not /api because the api subdomain is used for a professional setting,
 - CORS origin is controlled by CLIENT_URL variable in .env file.
 - For production safety, synchronize should be disabled in TypeORM configuration but migrations are not implemented yet.
+- due to the time constraint on the project unit tests coverage is not very high and e2e & integration will be implemented.
