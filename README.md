@@ -182,3 +182,4 @@ Use .env.example as a baseline.
 - CORS origin is controlled by CLIENT_URL variable in .env file.
 - For production safety, synchronize should be set to false in TypeORM configuration but migrations are not implemented yet.
 - due to the time constraint on the project unit tests coverage is not very high and e2e & integration will be implemented.
+- in Production `docker-compose.prod.yml`, the Postgres Database is not included for security & Performance reasons to be deployed seperately
