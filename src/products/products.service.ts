@@ -118,7 +118,7 @@ export class ProductsService {
     );
 
     if (!alreadyAssigned) {
-      throw new NotFoundException(
+      throw new ConflictException(
         `Cannot Delete from Catalog: Product ID: ${productId} is not assigned to Catalog ID: ${catalogId}`,
       );
     }
