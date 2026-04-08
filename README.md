@@ -50,7 +50,6 @@ Built for the **Webellian** technical assessment
 │   ├── products.service.spec.ts                   # Product service unit tests
 │   ├── catalogs.e2e-spec.ts                       # Catalog e2e tests
 │   ├── products.e2e-spec.ts                       # Product e2e tests
-├── Dockerfile                                     # Multi-stage production image
 ├── docker-compose.yml                             # Local PostgreSQL and Adminer for review
 ├── docker-compose.prod.yml                        # Production API compose for deployment
 └── .env.example                                   # Environment variable template
@@ -75,7 +74,7 @@ Built for the **Webellian** technical assessment
 - Retrieve all products in a catalog
 - Request validation and validation typed DTOs
 - Seed script for local data
-- Unit tests and e2e tests
+- Unit tests
 
 ## Quick Start
 
@@ -179,8 +178,8 @@ Use .env.example as a baseline.
 
 ## Development Notes
 
-- i wanted to
 - Swagger is mounted at root path (/), not /api because the api subdomain is used for a professional setting,
 - CORS origin is controlled by CLIENT_URL variable in .env file.
-- For production safety, synchronize should be disabled in TypeORM configuration but migrations are not implemented yet.
+- For production safety, synchronize should be set to false in TypeORM configuration but migrations are not implemented yet.
 - due to the time constraint on the project unit tests coverage is not very high and e2e & integration will be implemented.
+- in Production `docker-compose.prod.yml`, the Postgres Database is not included for security & Performance reasons to be deployed seperately

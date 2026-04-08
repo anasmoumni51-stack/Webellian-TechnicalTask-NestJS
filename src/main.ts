@@ -22,7 +22,12 @@ async function bootstrap() {
   //Swagger Integration
   const config = new DocumentBuilder()
     .setTitle('Webellian Technical Task Backend API')
-    .setDescription('API documentation for the Catalogs & Products assignment')
+    .setDescription(
+      'REST API for managing shop catalogs, products, and their relationships deployed live on an Amazon AWS EC2 instance using an subdomain with HTTPS (FULL STRICT) on Cloudflare CDN + Rate Limiting 100req/10sec.\n\n' +
+        'Created for the Webellian technical assessment,' +
+        ' Each endpoint/DTO/Entity includes Swagger decorators so you can test them ' +
+        'directly from this documentation.',
+    )
     .setVersion('1.0')
     .addTag('Catalogs', 'Manage product catalogs')
     .addTag('Products', 'Manage products and assignments')

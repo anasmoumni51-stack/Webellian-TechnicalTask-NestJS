@@ -17,7 +17,7 @@ export class CreateProductDto {
   })
   @IsString()
   @MinLength(2)
-  @MaxLength(50)
+  @MaxLength(100)
   name!: string;
 
   @ApiProperty({
@@ -41,7 +41,8 @@ export class CreateProductDto {
     required: false,
     description: 'if the product is available in stock or not (optional)',
   })
-  @IsBoolean()
+   
   @IsOptional()
+  @IsBoolean()
   isAvailable?: boolean = true;
 }

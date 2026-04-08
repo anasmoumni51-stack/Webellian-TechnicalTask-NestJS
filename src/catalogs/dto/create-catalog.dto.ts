@@ -14,7 +14,7 @@ export class CreateCatalogDto {
   })
   @IsString()
   @MinLength(2)
-  @MaxLength(50)
+  @MaxLength(100)
   name!: string;
 
   @ApiProperty({
@@ -23,7 +23,7 @@ export class CreateCatalogDto {
   })
   @IsOptional()
   @IsString()
-  @MaxLength(250)
+  @MaxLength(200)
   description?: string = '';
 
   @ApiProperty({
