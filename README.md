@@ -1,98 +1,186 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Webellian Technical Task API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This repo is a NestJS API for managing catalogs and products with Many to Many relationship, validation, Swagger docs, PostgreSQL & Type ORM, Docker support, test coverage, CI/CD using Github Actions + Dokploy and Deployement on an Amazon EC2 Linux instance.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Built for the **Webellian** technical assessment
 
-## Description
+## Live Deployment URL :
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Environment: AWS EC2 instance & docker containers
+- Deployment server: Amazon EC2 m7i-flex.large Ubuntu 22 LTS 64
+- CI/CD : Github Actions & Dokploy
+- Live URL: https://api.technical-task.live
+- Swagger UI: https://api.technical-task.live
+- HTTPS: enabled + Cloudflare CDN Full Strict + Reverse Proxy
+- Rate limiting: enabled at the Cloudflare CDN layer
 
-## Project setup
+## Project Structure
 
-```bash
-$ pnpm install
+```text
+.
+├── src/
+│   ├── app.module.ts                              # Root module (Config + TypeORM + feature modules)
+│   ├── main.ts                                    # Global Validation, Swagger, Middlewares (CORS, helmet), Filter
+│   ├── catalogs/
+│   │   ├── catalogs.controller.ts                 # Catalog HTTP endpoints
+│   │   ├── catalogs.module.ts                     # Catalog module
+│   │   ├── catalogs.service.ts                    # Catalog services and injected repositories
+│   │   └── dto/
+│   │       ├── create-catalog.dto.ts             # Create catalog request DTO
+│   │       └── update-catalog.dto.ts             # Update catalog request DTO
+│   ├── products/
+│   │   ├── products.controller.ts                 # Product HTTP endpoints + assignment routes
+│   │   ├── products.module.ts                     # Product module
+│   │   ├── products.service.ts                    # Product services and injected repositories
+│   │   └── dto/
+│   │       ├── create-product.dto.ts             # Create product request DTO
+│   │       └── update-product.dto.ts             # Update product request DTO
+│   ├── database/
+│   │   ├── database.config.ts                    # TypeORM config factory (.env injected)
+│   │   ├── entities/
+│   │   │   ├── catalog.entity.ts                 # Catalog Database schema ( entity )
+│   │   │   └── product.entity.ts                 # Product Database schema ( entity )
+│   │   └── seeds/
+│   │       └── seed.ts                           # Local seed script
+│   └── common/
+│       └── filters/
+│           └── http-exception-filter.ts          # Global exception response formatting
+├── test/
+│   ├── catalogs.service.spec.ts                   # Catalog service unit tests
+│   ├── products.service.spec.ts                   # Product service unit tests
+│   ├── catalogs.e2e-spec.ts                       # Catalog e2e tests
+│   ├── products.e2e-spec.ts                       # Product e2e tests
+├── Dockerfile                                     # Multi-stage production image
+├── docker-compose.yml                             # Local PostgreSQL and Adminer for review
+├── docker-compose.prod.yml                        # Production API compose for deployment
+└── .env.example                                   # Environment variable template
 ```
 
-## Compile and run the project
+## Stack & Service Overview
+
+- Framework: NestJS 11 + TypeScript 5.7.3
+- Runtime: Node.js 20
+- Database: PostgreSQL 16
+- ORM: TypeORM 0.3.28
+- Validation: class-validator on the DTO Level + global ValidationPipe
+- Security: helmet + CORS + global exception filter + Cloudflare CDN (Rate Limiting / Full strict 443 https)
+- API docs: Swagger OpenAPI (mounted at root path)
+
+## Features
+
+- Catalog CRUD operations
+- Product CRUD operations
+- Assign product to catalog
+- Remove product from catalog
+- Retrieve all products in a catalog
+- Request validation and validation typed DTOs
+- Seed script for local data
+- Unit tests and e2e tests
+
+## Quick Start
+
+### 1) Install dependencies
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm install
 ```
 
-## Run tests
+### 2) Configure environment
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 3) Start local database services
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+docker compose up -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+This starts:
 
-## Resources
+- PostgreSQL on port 5432
+- Adminer on port 8080
 
-Check out a few resources that may come in handy when working with NestJS:
+### 4) Start API in dev mode
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+pnpm run start:dev
+```
 
-## Support
+Default local API URL:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- http://localhost:3000
 
-## Stay in touch
+Swagger docs locally:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- http://localhost:3000
 
-## License
+### 5) Seed Local Database
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+pnpm run seed
+```
+
+Seed data includes sample catalogs and products with relationships.
+
+## API Endpoints
+
+### Catalogs
+
+- GET /catalogs - Retrieve all catalogs
+- GET /catalogs/:id - Retrieve one catalog
+- POST /catalogs - Create a catalog
+- PUT /catalogs/:id - Update a catalog
+- DELETE /catalogs/:id - Delete a catalog
+- GET /catalogs/:id/products - Get products in a catalog
+
+### Products
+
+- GET /products - Retrieve all products
+- GET /products/:id - Retrieve one product
+- POST /products - Create a product
+- PUT /products/:id - Update a product
+- DELETE /products/:id - Delete a product
+- POST /products/:id/catalogs/:catalogId - Assign product to catalog
+- DELETE /products/:id/catalogs/:catalogId - Remove product from catalog
+
+## Data Model
+
+**Design Decision:** Many-to-many relationship, a product can belong to multiple catalogs.
+
+```text
+┌──────────────┐         ┌──────────────────────┐         ┌──────────────┐
+│   catalogs   │         │  productsInCatalogs  │         │   products   │
+├──────────────┤         ├──────────────────────┤         ├──────────────┤
+│ id (PK)      │─┐       │ catalog_id (FK)      │      ┌──│ id (PK)      │
+│ name         │ └────→  │ product_id (FK)      │ ←────┘  │ name         │
+│ description? │         └─────────────────────-┘         │ price        │
+│ isActive     │                                          │ description? │
+└──────────────┘                                          │ isAvailable  │
+														  └──────────────┘
+```
+
+- `catalogs` table maps to `CatalogEntity`
+- `products` table maps to `ProductEntity`
+- `productsInCatalogs` is the TypeORM join table used for assignments
+
+## Environment Variables
+
+Use .env.example as a baseline.
+
+- DATABASE_HOST # Postgres HOSTNAME
+- DATABASE_PORT # PORT 5432 by default
+- DATABASE_USER
+- DATABASE_PASSWORD
+- DATABASE_NAME # should match Postgres DB name
+- CLIENT_URL # for CORS Your domain name or http://localhost:3000 default ( modify on main.ts )
+- PORT # Nest JS app deployement PORT Default 3000
+
+## Development Notes
+
+- i wanted to
+- Swagger is mounted at root path (/), not /api because the api subdomain is used for a professional setting,
+- CORS origin is controlled by CLIENT_URL variable in .env file.
+- For production safety, synchronize should be disabled in TypeORM configuration but migrations are not implemented yet.
+- due to the time constraint on the project unit tests coverage is not very high and e2e & integration will be implemented.

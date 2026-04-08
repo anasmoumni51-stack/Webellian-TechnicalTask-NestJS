@@ -3,7 +3,6 @@
 /node_modules
 /build
 /internals
-/test
 
 # Logs
 logs
@@ -16,6 +15,7 @@ lerna-debug.log*
 
 # OS
 .DS_Store
+Dockerfile
 
 # Tests
 /coverage
