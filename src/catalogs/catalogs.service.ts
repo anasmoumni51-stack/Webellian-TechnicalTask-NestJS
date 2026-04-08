@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCatalogDto } from './dto/create-catalog.dto';
@@ -26,6 +30,15 @@ export class CatalogsService {
   }
 
   async create(createCatalogDto: CreateCatalogDto): Promise<CatalogEntity> {
+    const existingCatalog = await this.catalogRepo.findOne({
+      where: { name: createCatalogDto.name },
+    });
+
+    if (existingCatalog) {
+      throw new ConflictException(
+        `Catalog with name "${createCatalogDto.name}" already exists`,
+      );
+    }
     const catalog = this.catalogRepo.create(createCatalogDto);
     return await this.catalogRepo.save(catalog);
   }

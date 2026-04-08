@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnpm-debug.log
+.env
+.env.test
+.env.production
+.DS_Store
+.git
+.github
+internals
+test
+README.md
