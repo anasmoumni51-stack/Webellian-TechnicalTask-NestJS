@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { AllExceptionsFilter } from './common/filters/http-exception-filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,7 +15,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.use(helmet());
   app.enableCors({ origin: process.env.CLIENT_URL || 'http://localhost:3000' });
 

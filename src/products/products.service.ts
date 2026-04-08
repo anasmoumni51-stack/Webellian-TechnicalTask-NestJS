@@ -33,14 +33,14 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto): Promise<ProductEntity> {
     const alreadyExists = await this.productRepo.findOne({
-    where: { name: createProductDto.name },
-  });
+      where: { name: createProductDto.name },
+    });
 
-  if (alreadyExists) {
-    throw new ConflictException(
-      `Product with name "${createProductDto.name}" already exists`,
-    );
-  }
+    if (alreadyExists) {
+      throw new ConflictException(
+        `Product with name "${createProductDto.name}" already exists`,
+      );
+    }
     const product = this.productRepo.create(createProductDto);
     return await this.productRepo.save(product);
   }
