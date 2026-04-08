@@ -179,7 +179,7 @@ Use .env.example as a baseline.
 
 ## Development Notes
 
-- due to the time constraint on the project the e2e tests & unit tests coverage is not very high.
+- due to the time constraint on the project unit tests coverage is not very high and e2e & integration will be implemented.
 - Swagger is mounted at root path (/), not /api because the api subdomain is used for a professional setting,
 - CORS origin is controlled by CLIENT_URL variable in .env file.
 - For production safety, synchronize should be disabled in TypeORM configuration but migrations are not implemented yet.
