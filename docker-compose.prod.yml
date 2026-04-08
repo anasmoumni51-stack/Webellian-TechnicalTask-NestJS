@@ -18,7 +18,7 @@ services:
       - DATABASE_NAME=${DATABASE_NAME}
       - CLIENT_URL=${CLIENT_URL:-https://your-domain.com} # Used for CORS
     networks:
-      - dokploy-network #
+      - dokploy-network
     
 networks:
   dokploy-network:
