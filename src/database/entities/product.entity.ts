@@ -21,7 +21,7 @@ export class ProductEntity {
     example: "Wireless Headphones",
     description: "The name of the product",
   })
-  @Column({ unique: true })
+  @Column()
   name!: string;
 
   @ApiProperty({ example: 99.99, description: "The price of the product" })
