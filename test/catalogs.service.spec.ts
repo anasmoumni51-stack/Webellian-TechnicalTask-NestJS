@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { CatalogsService } from '../src/catalogs/catalogs.service';
-import { CatalogEntity } from '../src/database/entities/catalog.entity';
-import { NotFoundException } from '@nestjs/common';
+import { Test, TestingModule } from "@nestjs/testing";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { CatalogsService } from "../src/catalogs/catalogs.service";
+import { CatalogEntity } from "../src/database/entities/catalog.entity";
+import { NotFoundException } from "@nestjs/common";
 
-describe('CatalogsService', () => {
+describe("CatalogsService", () => {
   let service: CatalogsService;
 
   const mockCatalogRepository = {
@@ -34,13 +34,13 @@ describe('CatalogsService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should return an array of catalogs', async () => {
-      const catalogs = [{ id: 1, name: 'Catalog 1' }];
+  describe("findAll", () => {
+    it("should return an array of catalogs", async () => {
+      const catalogs = [{ id: 1, name: "Catalog 1" }];
       mockCatalogRepository.find.mockResolvedValue(catalogs);
 
       const result = await service.findAll();
@@ -49,9 +49,9 @@ describe('CatalogsService', () => {
     });
   });
 
-  describe('findOne', () => {
-    it('should return a single catalog', async () => {
-      const catalog = { id: 1, name: 'Catalog 1' };
+  describe("findOne", () => {
+    it("should return a single catalog", async () => {
+      const catalog = { id: 1, name: "Catalog 1" };
       mockCatalogRepository.findOne.mockResolvedValue(catalog);
 
       const result = await service.findOne(1);
@@ -61,16 +61,16 @@ describe('CatalogsService', () => {
       });
     });
 
-    it('should throw NotFoundException if catalog is not found', async () => {
+    it("should throw NotFoundException if catalog is not found", async () => {
       mockCatalogRepository.findOne.mockResolvedValue(null);
 
       await expect(service.findOne(99)).rejects.toThrow(NotFoundException);
     });
   });
 
-  describe('create', () => {
-    it('should successfully create a catalog', async () => {
-      const dto = { name: 'Test Catalog', isActive: true };
+  describe("create", () => {
+    it("should successfully create a catalog", async () => {
+      const dto = { name: "Test Catalog", isActive: true };
       const savedCatalog = { id: 1, ...dto };
 
       mockCatalogRepository.create.mockReturnValue(dto);
@@ -81,10 +81,10 @@ describe('CatalogsService', () => {
     });
   });
 
-  describe('update', () => {
-    it('should update a catalog', async () => {
-      const existingCatalog = { id: 1, name: 'Old Catalog' };
-      const updateDto = { name: 'Updated Catalog' };
+  describe("update", () => {
+    it("should update a catalog", async () => {
+      const existingCatalog = { id: 1, name: "Old Catalog" };
+      const updateDto = { name: "Updated Catalog" };
 
       mockCatalogRepository.findOne
         .mockResolvedValueOnce(existingCatalog)
@@ -93,13 +93,13 @@ describe('CatalogsService', () => {
       mockCatalogRepository.update.mockResolvedValue({ affected: 1 });
 
       const result = await service.update(1, updateDto);
-      expect(result.name).toEqual('Updated Catalog');
+      expect(result.name).toEqual("Updated Catalog");
     });
   });
 
-  describe('delete', () => {
-    it('should delete a catalog', async () => {
-      const catalog = { id: 1, name: 'Catalog 1' };
+  describe("delete", () => {
+    it("should delete a catalog", async () => {
+      const catalog = { id: 1, name: "Catalog 1" };
       mockCatalogRepository.findOne.mockResolvedValue(catalog);
       mockCatalogRepository.delete.mockResolvedValue({ affected: 1 });
 

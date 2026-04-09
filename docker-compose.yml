@@ -24,6 +24,24 @@ services:
             - postgres
 
 
+# api: nest js local container not yet implemented ( pnpm run test & pnpm run seed scripts should be modified )
+    #     build: .
+    #     container_name: technicaltask-api
+    #     restart: unless-stopped
+    #     ports:
+    #         - "3000:3000"
+    #     environment: # For Type ORM must Match Database ( refer to .env.example )
+    #         DATABASE_HOST: 'postgres'
+    #         DATABASE_PORT: '5432'
+    #         DATABASE_NAME: ${DATABASE_NAME:-technicaltask_db}
+    #         DATABASE_USER: ${DATABASE_USER:-postgres}
+    #         DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+    #         CLIENT_URL: ${CLIENT_URL:-http://localhost:3000}  # CORS URL 
+        
+    #     depends_on:
+    #         - postgres
+
+
 volumes:
   postgres_data:
     driver: local

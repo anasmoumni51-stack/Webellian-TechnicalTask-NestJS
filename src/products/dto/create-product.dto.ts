@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsBoolean,
   IsNumber,
@@ -8,12 +8,12 @@ import {
   MaxLength,
   Min,
   MinLength,
-} from 'class-validator';
+} from "class-validator";
 
 export class CreateProductDto {
   @ApiProperty({
-    example: 'MacBook Pro',
-    description: 'The title name of the product',
+    example: "MacBook Pro",
+    description: "The title name of the product",
   })
   @IsString()
   @MinLength(2)
@@ -23,25 +23,24 @@ export class CreateProductDto {
   @ApiProperty({
     example: 1999.99,
     description:
-      'Product price in any currency (Formatting not yet implemented)',
+      "Product price in any currency (Formatting not yet implemented)",
   })
   @IsNumber()
   @Min(0)
   @Max(99999)
   price!: number;
 
-  @ApiProperty({ example: 'A high-end laptop for developers', required: false })
+  @ApiProperty({ example: "A high-end laptop for developers", required: false })
   @IsOptional()
   @IsString()
   @MaxLength(200)
-  description?: string = '';
+  description?: string = "";
 
   @ApiProperty({
     example: true,
     required: false,
-    description: 'if the product is available in stock or not (optional)',
+    description: "if the product is available in stock or not (optional)",
   })
-   
   @IsOptional()
   @IsBoolean()
   isAvailable?: boolean = true;

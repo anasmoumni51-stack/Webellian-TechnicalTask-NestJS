@@ -10,13 +10,13 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
-      - DATABASE_HOST=${DATABASE_HOST}
-      - DATABASE_PORT=${DATABASE_PORT:-5432}
-      - DATABASE_USER=${DATABASE_USER}
-      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-      - DATABASE_NAME=${DATABASE_NAME}
-      - CLIENT_URL=${CLIENT_URL:-https://your-domain.com} # Used for CORS
+      - NODE_ENV: production
+      - DATABASE_HOST: ${DATABASE_HOST}
+      - DATABASE_PORT: ${DATABASE_PORT:-5432}
+      - DATABASE_USER: ${DATABASE_USER}
+      - DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      - DATABASE_NAME: ${DATABASE_NAME}
+      - CLIENT_URL: ${CLIENT_URL:-https://your-domain.com} # Used for CORS
     networks:
       - dokploy-network
     

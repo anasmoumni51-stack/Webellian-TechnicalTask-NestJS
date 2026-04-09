@@ -2,13 +2,13 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductEntity } from '../database/entities/product.entity';
-import { CatalogEntity } from '../database/entities/catalog.entity';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { CreateProductDto } from "./dto/create-product.dto";
+import { UpdateProductDto } from "./dto/update-product.dto";
+import { ProductEntity } from "../database/entities/product.entity";
+import { CatalogEntity } from "../database/entities/catalog.entity";
 
 @Injectable()
 export class ProductsService {
@@ -67,7 +67,7 @@ export class ProductsService {
   ): Promise<ProductEntity> {
     const product = await this.productRepo.findOne({
       where: { id: productId },
-      relations: ['catalogs'],
+      relations: ["catalogs"],
     });
     if (!product) {
       throw new NotFoundException(`Product with ID: ${productId} not found`);
@@ -100,7 +100,7 @@ export class ProductsService {
   ): Promise<ProductEntity> {
     const product = await this.productRepo.findOne({
       where: { id: productId },
-      relations: ['catalogs'],
+      relations: ["catalogs"],
     });
     if (!product) {
       throw new NotFoundException(`Product with ID: ${productId} not found`);

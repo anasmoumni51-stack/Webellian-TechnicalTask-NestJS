@@ -48,8 +48,6 @@ Built for the **Webellian** technical assessment
 ├── test/
 │   ├── catalogs.service.spec.ts                   # Catalog service unit tests
 │   ├── products.service.spec.ts                   # Product service unit tests
-│   ├── catalogs.e2e-spec.ts                       # Catalog e2e tests
-│   ├── products.e2e-spec.ts                       # Product e2e tests
 ├── docker-compose.yml                             # Local PostgreSQL and Adminer for review
 ├── docker-compose.prod.yml                        # Production API compose for deployment
 └── .env.example                                   # Environment variable template
@@ -123,7 +121,7 @@ pnpm run seed
 
 Seed data includes sample catalogs and products with relationships.
 
-## API Endpoints
+## REST API Endpoints
 
 ### Catalogs
 
@@ -173,7 +171,8 @@ Use .env.example as a baseline.
 - DATABASE_USER
 - DATABASE_PASSWORD
 - DATABASE_NAME # should match Postgres DB name
-- CLIENT_URL # for CORS Your domain name or http://localhost:3000 default ( modify on main.ts )
+- DATABASE_SYNC # database synchronisation is true by default
+- CLIENT_URL. # for CORS Your domain name or http://localhost:3000 default ( modify on main.ts )
 - PORT # Nest JS app deployement PORT Default 3000
 
 ## Development Notes
