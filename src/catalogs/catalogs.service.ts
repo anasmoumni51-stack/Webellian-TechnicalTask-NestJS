@@ -2,13 +2,13 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateCatalogDto } from './dto/create-catalog.dto';
-import { UpdateCatalogDto } from './dto/update-catalog.dto';
-import { CatalogEntity } from '../database/entities/catalog.entity';
-import { ProductEntity } from '../database/entities/product.entity';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { CreateCatalogDto } from "./dto/create-catalog.dto";
+import { UpdateCatalogDto } from "./dto/update-catalog.dto";
+import { CatalogEntity } from "../database/entities/catalog.entity";
+import { ProductEntity } from "../database/entities/product.entity";
 
 @Injectable()
 export class CatalogsService {
@@ -61,7 +61,7 @@ export class CatalogsService {
   async getProducts(catalogId: number): Promise<ProductEntity[]> {
     const catalog = await this.catalogRepo.findOne({
       where: { id: catalogId },
-      relations: ['products'],
+      relations: ["products"],
     });
     if (!catalog) {
       throw new NotFoundException(`Catalog with ID:${catalogId} not found`);

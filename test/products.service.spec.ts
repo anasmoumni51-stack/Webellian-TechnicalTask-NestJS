@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { ConflictException, NotFoundException } from '@nestjs/common';
-import { ProductsService } from '../src/products/products.service';
-import { ProductEntity } from '../src/database/entities/product.entity';
-import { CatalogEntity } from '../src/database/entities/catalog.entity';
+import { Test, TestingModule } from "@nestjs/testing";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { ConflictException, NotFoundException } from "@nestjs/common";
+import { ProductsService } from "../src/products/products.service";
+import { ProductEntity } from "../src/database/entities/product.entity";
+import { CatalogEntity } from "../src/database/entities/catalog.entity";
 
-describe('ProductsService', () => {
+describe("ProductsService", () => {
   let service: ProductsService;
 
   const mockProductRepo = {
@@ -43,22 +43,22 @@ describe('ProductsService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should return all products', async () => {
-      const mockResult = [{ id: 1, name: 'Phone', price: 999.0 }];
+  describe("findAll", () => {
+    it("should return all products", async () => {
+      const mockResult = [{ id: 1, name: "Phone", price: 999.0 }];
       mockProductRepo.find.mockResolvedValue(mockResult);
       expect(await service.findAll()).toEqual(mockResult);
     });
   });
 
-  describe('assignToCatalog', () => {
-    it('should assign a product to a catalog and save the change', async () => {
-      const product = { id: 1, name: 'Phone', catalogs: [] };
-      const catalog = { id: 2, name: 'Electronics' };
+  describe("assignToCatalog", () => {
+    it("should assign a product to a catalog and save the change", async () => {
+      const product = { id: 1, name: "Phone", catalogs: [] };
+      const catalog = { id: 2, name: "Electronics" };
 
       mockProductRepo.findOne.mockResolvedValue(product);
       mockCatalogRepo.findOne.mockResolvedValue(catalog);
@@ -72,17 +72,17 @@ describe('ProductsService', () => {
       expect(mockProductRepo.save).toHaveBeenCalled();
     });
 
-    it('should throw NotFoundException if product is missing', async () => {
+    it("should throw NotFoundException if product is missing", async () => {
       mockProductRepo.findOne.mockResolvedValue(null);
       await expect(service.assignToCatalog(999, 2)).rejects.toThrow(
         NotFoundException,
       );
     });
 
-    it('should throw NotFoundException if catalog is missing', async () => {
+    it("should throw NotFoundException if catalog is missing", async () => {
       mockProductRepo.findOne.mockResolvedValue({
         id: 1,
-        name: 'Phone',
+        name: "Phone",
         catalogs: [],
       });
       mockCatalogRepo.findOne.mockResolvedValue(null);
@@ -91,9 +91,9 @@ describe('ProductsService', () => {
       );
     });
 
-    it('should throw ConflictException if already assigned', async () => {
-      const catalog = { id: 2, name: 'Electronics' };
-      const product = { id: 1, name: 'Phone', catalogs: [catalog] }; // Already has catalog ID 2
+    it("should throw ConflictException if already assigned", async () => {
+      const catalog = { id: 2, name: "Electronics" };
+      const product = { id: 1, name: "Phone", catalogs: [catalog] }; // Already has catalog ID 2
 
       mockProductRepo.findOne.mockResolvedValue(product);
       mockCatalogRepo.findOne.mockResolvedValue(catalog);
@@ -104,10 +104,10 @@ describe('ProductsService', () => {
     });
   });
 
-  describe('deleteFromCatalog', () => {
-    it('should remove a product from a catalog and save the change', async () => {
-      const catalog = { id: 2, name: 'Electronics' };
-      const product = { id: 1, name: 'Phone', catalogs: [catalog] };
+  describe("deleteFromCatalog", () => {
+    it("should remove a product from a catalog and save the change", async () => {
+      const catalog = { id: 2, name: "Electronics" };
+      const product = { id: 1, name: "Phone", catalogs: [catalog] };
 
       mockProductRepo.findOne.mockResolvedValue(product);
       mockProductRepo.save.mockResolvedValue({ ...product, catalogs: [] });
@@ -116,9 +116,9 @@ describe('ProductsService', () => {
       expect(result.catalogs.length).toBe(0);
     });
 
-    it('should throw ConflictException if trying to remove an unassigned catalog', async () => {
-      const catalog = { id: 2, name: 'Electronics' };
-      const product = { id: 1, name: 'Phone', catalogs: [catalog] };
+    it("should throw ConflictException if trying to remove an unassigned catalog", async () => {
+      const catalog = { id: 2, name: "Electronics" };
+      const product = { id: 1, name: "Phone", catalogs: [catalog] };
 
       mockProductRepo.findOne.mockResolvedValue(product);
 
