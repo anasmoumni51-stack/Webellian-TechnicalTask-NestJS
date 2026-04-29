@@ -2,7 +2,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { CatalogsService } from "../src/catalogs/catalogs.service";
 import { CatalogEntity } from "../src/database/entities/catalog.entity";
-import { NotFoundException } from "@nestjs/common";
+import { ConflictException, NotFoundException } from "@nestjs/common";
 
 describe("CatalogsService", () => {
   let service: CatalogsService;
@@ -43,9 +43,26 @@ describe("CatalogsService", () => {
       const catalogs = [{ id: 1, name: "Catalog 1" }];
       mockCatalogRepository.find.mockResolvedValue(catalogs);
 
-      const result = await service.findAll();
+      const result = await service.findAll({ page: 1, limit: 50 });
       expect(result).toEqual(catalogs);
-      expect(mockCatalogRepository.find).toHaveBeenCalled();
+      expect(mockCatalogRepository.find).toHaveBeenCalledWith({
+        skip: 0,
+        take: 50,
+        order: { id: "ASC" },
+      });
+    });
+
+    it("should apply pagination correctly", async () => {
+      const catalogs = [{ id: 3, name: "Catalog 3" }];
+      mockCatalogRepository.find.mockResolvedValue(catalogs);
+
+      const result = await service.findAll({ page: 2, limit: 2 });
+      expect(result).toEqual(catalogs);
+      expect(mockCatalogRepository.find).toHaveBeenCalledWith({
+        skip: 2,
+        take: 2,
+        order: { id: "ASC" },
+      });
     });
   });
 
@@ -79,6 +96,13 @@ describe("CatalogsService", () => {
       const result = await service.create(dto);
       expect(result).toEqual(savedCatalog);
     });
+
+    it("should throw ConflictException if name already exists", async () => {
+      const dto = { name: "Electronics", isActive: true };
+      mockCatalogRepository.findOne.mockResolvedValue({ id: 1, name: "Electronics" });
+
+      await expect(service.create(dto)).rejects.toThrow(ConflictException);
+    });
   });
 
   describe("update", () => {
@@ -95,6 +119,14 @@ describe("CatalogsService", () => {
       const result = await service.update(1, updateDto);
       expect(result.name).toEqual("Updated Catalog");
     });
+
+    it("should throw NotFoundException if catalog to update is not found", async () => {
+      mockCatalogRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.update(99, { name: "Test" })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
   });
 
   describe("delete", () => {
@@ -106,6 +138,12 @@ describe("CatalogsService", () => {
       const result = await service.delete(1);
       expect(result).toEqual(catalog);
       expect(mockCatalogRepository.delete).toHaveBeenCalledWith(1);
+    });
+
+    it("should throw NotFoundException if catalog to delete is not found", async () => {
+      mockCatalogRepository.findOne.mockResolvedValue(null);
+
+      await expect(service.delete(99)).rejects.toThrow(NotFoundException);
     });
   });
 });

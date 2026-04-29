@@ -48,10 +48,125 @@ describe("ProductsService", () => {
   });
 
   describe("findAll", () => {
-    it("should return all products", async () => {
+    it("should return all products with default pagination", async () => {
       const mockResult = [{ id: 1, name: "Phone", price: 999.0 }];
       mockProductRepo.find.mockResolvedValue(mockResult);
-      expect(await service.findAll()).toEqual(mockResult);
+
+      const result = await service.findAll({ page: 1, limit: 20 });
+      expect(result).toEqual(mockResult);
+      expect(mockProductRepo.find).toHaveBeenCalledWith({
+        skip: 0,
+        take: 20,
+        order: { id: "ASC" },
+      });
+    });
+
+    it("should apply pagination correctly", async () => {
+      const mockResult = [{ id: 3, name: "Tablet", price: 499.0 }];
+      mockProductRepo.find.mockResolvedValue(mockResult);
+
+      const result = await service.findAll({ page: 2, limit: 2 });
+      expect(result).toEqual(mockResult);
+      expect(mockProductRepo.find).toHaveBeenCalledWith({
+        skip: 2,
+        take: 2,
+        order: { id: "ASC" },
+      });
+    });
+
+    it("should filter by catalogId when provided", async () => {
+      const mockResult = [{ id: 1, name: "Phone", price: 999.0 }];
+      mockProductRepo.find.mockResolvedValue(mockResult);
+
+      const result = await service.findAll({ page: 1, limit: 20, catalogId: 1 });
+      expect(result).toEqual(mockResult);
+      expect(mockProductRepo.find).toHaveBeenCalledWith({
+        where: { catalogs: { id: 1 } },
+        skip: 0,
+        take: 20,
+        order: { id: "ASC" },
+      });
+    });
+  });
+
+  describe("findOne", () => {
+    it("should return a single product", async () => {
+      const product = { id: 1, name: "Phone", price: 999.0 };
+      mockProductRepo.findOne.mockResolvedValue(product);
+
+      const result = await service.findOne(1);
+      expect(result).toEqual(product);
+      expect(mockProductRepo.findOne).toHaveBeenCalledWith({
+        where: { id: 1 },
+      });
+    });
+
+    it("should throw NotFoundException if product is not found", async () => {
+      mockProductRepo.findOne.mockResolvedValue(null);
+
+      await expect(service.findOne(99)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe("create", () => {
+    it("should successfully create a product", async () => {
+      const dto = { name: "Tablet", price: 499.0 };
+      const savedProduct = { id: 1, ...dto };
+
+      mockProductRepo.create.mockReturnValue(dto);
+      mockProductRepo.save.mockResolvedValue(savedProduct);
+
+      const result = await service.create(dto);
+      expect(result).toEqual(savedProduct);
+    });
+
+    it("should throw ConflictException if name already exists", async () => {
+      const dto = { name: "Phone", price: 999.0 };
+      mockProductRepo.findOne.mockResolvedValue({ id: 1, name: "Phone" });
+
+      await expect(service.create(dto)).rejects.toThrow(ConflictException);
+    });
+  });
+
+  describe("update", () => {
+    it("should update a product", async () => {
+      const existingProduct = { id: 1, name: "Old Phone", price: 999.0 };
+      const updateDto = { name: "New Phone" };
+
+      mockProductRepo.findOne
+        .mockResolvedValueOnce(existingProduct)
+        .mockResolvedValueOnce({ ...existingProduct, ...updateDto });
+
+      mockProductRepo.update.mockResolvedValue({ affected: 1 });
+
+      const result = await service.update(1, updateDto);
+      expect(result.name).toEqual("New Phone");
+    });
+
+    it("should throw NotFoundException if product to update is not found", async () => {
+      mockProductRepo.findOne.mockResolvedValue(null);
+
+      await expect(service.update(99, { name: "Test" })).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+  });
+
+  describe("delete", () => {
+    it("should delete a product", async () => {
+      const product = { id: 1, name: "Phone", price: 999.0 };
+      mockProductRepo.findOne.mockResolvedValue(product);
+      mockProductRepo.delete.mockResolvedValue({ affected: 1 });
+
+      const result = await service.delete(1);
+      expect(result).toEqual(product);
+      expect(mockProductRepo.delete).toHaveBeenCalledWith(1);
+    });
+
+    it("should throw NotFoundException if product to delete is not found", async () => {
+      mockProductRepo.findOne.mockResolvedValue(null);
+
+      await expect(service.delete(99)).rejects.toThrow(NotFoundException);
     });
   });
 
