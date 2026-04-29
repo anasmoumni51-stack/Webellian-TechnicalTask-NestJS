@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from "@nestjs/common";
 import { ProductsService } from "./products.service";
 import { CreateProductDto } from "./dto/create-product.dto";
@@ -18,25 +19,36 @@ import {
   ApiNotFoundResponse,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { PaginationProductDto } from "./dto/pagination-product.dto";
+import { QueryProductDto } from "./dto/query-product.dto";
 
 @ApiTags("Products")
 @Controller("products")
 export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
 
-  @ApiOperation({ summary: "Retrieve all products" })
-  @ApiResponse({
-    status: 200,
-    description:
-      "List of all products successfully retrieved ( assigned catalogs are not included )",
-    type: [ProductEntity],
-  })
+   @ApiOperation({                                                                                                                                                                                                                                                        
+    summary: "Retrieve all products (paginated, optionally retreive products in catalog)",
+  })                                                                                                                                                                                                                                                                     
+  @ApiQuery({                                                                                                                                                                                                                                                            
+    name: "catalogId",                                                                                                                                                                                                                                                   
+    required: false,                                                                                                                                                                                                                                                     
+    description: "retreive all products in the catalog by catalogID",                                                                                                                                                                                                                       
+    type: Number,                                                                                                                                                                                                                                                        
+    example: 1,                                                                                                                                                                                                                                                          
+  })                                                                                                                                                                                                                                                                     
+  @ApiResponse({                                                                                                                                                                                                                                                         
+    status: 200,                                                                                                                                                                                                                                                         
+    description: "List of products",                                                                                                                                                                                                                                     
+    type: [ProductEntity],                                                                                                                                                                                                                                               
+  })                                                                                                                                                                                                                                                                     
   @Get()
-  async retrieveAllProducts(): Promise<ProductEntity[]> {
-    return this.productService.findAll();
+  async retrieveAllProducts(@Query() queryProductDto: QueryProductDto): Promise<ProductEntity[]> {
+    return this.productService.findAll(queryProductDto);
   }
 
   @ApiOperation({ summary: "Retrieve a single product" })
@@ -113,6 +125,7 @@ export class ProductsController {
   ): Promise<ProductEntity> {
     return this.productService.delete(id);
   }
+
 
   @ApiOperation({ summary: "Assign a product to a catalog" })
   @ApiParam({

@@ -7,12 +7,12 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from "@nestjs/common";
 import { CatalogsService } from "./catalogs.service";
 import { CreateCatalogDto } from "./dto/create-catalog.dto";
 import { UpdateCatalogDto } from "./dto/update-catalog.dto";
 import { CatalogEntity } from "../database/entities/catalog.entity";
-import { ProductEntity } from "../database/entities/product.entity";
 import {
   ApiBody,
   ApiConflictResponse,
@@ -22,25 +22,26 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { PaginationCatalogDto } from "./dto/pagination-catalog.dto";
 
 @ApiTags("Catalogs")
 @Controller("catalogs")
 export class CatalogsController {
   constructor(private readonly catalogService: CatalogsService) {}
 
-  @ApiOperation({ summary: "Retrieve all catalogs" })
+  @ApiOperation({ summary: "Retrieve all catalogs (paginated)" })
   @ApiResponse({
     status: 200,
     description:
-      "List of all catalogs successfully retrieved ( products inside the catalog are not included in the response)",
+      "List of all catalogs successfully retrieved and paginated ( products inside the catalog are not included in this response)",
     type: [CatalogEntity],
   })
   @Get()
-  async retrieveAllCatalogs(): Promise<CatalogEntity[]> {
-    return this.catalogService.findAll();
+  async retrieveAllCatalogs(@Query() paginationCatalogDto : PaginationCatalogDto): Promise<CatalogEntity[]> {
+    return this.catalogService.findAll(paginationCatalogDto);
   }
 
-  @ApiOperation({ summary: "Retrieve one product" })
+  @ApiOperation({ summary: "Retrieve one catalog" })
   @ApiParam({
     name: "id",
     description: "The ID of the catalog",
@@ -115,24 +116,5 @@ export class CatalogsController {
     @Param("id", ParseIntPipe) id: number,
   ): Promise<CatalogEntity> {
     return this.catalogService.delete(id);
-  }
-
-  @ApiOperation({ summary: "Get products assigned to a specific catalog" })
-  @ApiParam({
-    name: "id",
-    description: "The ID of the catalog",
-    type: "number",
-  })
-  @ApiResponse({
-    status: 200,
-    description: "List of products belonging to the catalog",
-    type: [ProductEntity],
-  })
-  @ApiNotFoundResponse({ description: "Catalog not found" })
-  @Get(":id/products")
-  async getProductsInCatalog(
-    @Param("id", ParseIntPipe) id: number,
-  ): Promise<ProductEntity[]> {
-    return this.catalogService.getProducts(id);
   }
 }
