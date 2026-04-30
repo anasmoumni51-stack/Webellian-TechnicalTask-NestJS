@@ -73,7 +73,10 @@ Built for the **Webellian** technical assessment
 - Assign product to catalog
 - Remove product from catalog
 - Retrieve all products in a catalog
+- Filter products by catalog via query parameter
+- Pagination on all list endpoints (?page=1&limit=20)
 - Request validation and validation typed DTOs
+- Global exception filter
 - Seed script for local data
 - Unit tests
 
@@ -128,20 +131,20 @@ Seed data includes sample catalogs and products with relationships.
 
 ### Catalogs
 
-- GET /catalogs - Retrieve all catalogs
+- GET /catalogs - Retrieve all catalogs (paginated: ?page=1&limit=50)
 - GET /catalogs/:id - Retrieve one catalog
 - POST /catalogs - Create a catalog
 - PUT /catalogs/:id - Update a catalog
 - DELETE /catalogs/:id - Delete a catalog
-- GET /catalogs/:id/products - Get products in a catalog
 
 ### Products
 
-- GET /products - Retrieve all products
+- GET /products - Retrieve all products (paginated: ?page=1&limit=20, optional filter: ?catalogId=1)
 - GET /products/:id - Retrieve one product
 - POST /products - Create a product
 - PUT /products/:id - Update a product
 - DELETE /products/:id - Delete a product
+- GET /products?catalogId=:catalogId - Retrieve products in a catalog
 - POST /products/:id/catalogs/:catalogId - Assign product to catalog
 - DELETE /products/:id/catalogs/:catalogId - Remove product from catalog
 
