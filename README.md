@@ -26,6 +26,7 @@ Built for the **Webellian** technical assessment
 │   │   ├── catalogs.module.ts                     # Catalog module
 │   │   ├── catalogs.service.ts                    # Catalog services and injected repositories
 │   │   └── dto/
+│   │       ├── pagination-catalog.dto.ts         # Catalog pagination query DTO
 │   │       ├── create-catalog.dto.ts             # Create catalog request DTO
 │   │       └── update-catalog.dto.ts             # Update catalog request DTO
 │   ├── products/
@@ -33,6 +34,8 @@ Built for the **Webellian** technical assessment
 │   │   ├── products.module.ts                     # Product module
 │   │   ├── products.service.ts                    # Product services and injected repositories
 │   │   └── dto/
+│   │       ├── pagination-product.dto.ts         # Product pagination query DTO
+│   │       ├── query-product.dto.ts              # Product query DTO (pagination + optional catalogId filter)
 │   │       ├── create-product.dto.ts             # Create product request DTO
 │   │       └── update-product.dto.ts             # Update product request DTO
 │   ├── database/

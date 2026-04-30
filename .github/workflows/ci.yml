@@ -40,7 +40,7 @@ jobs:
       - name: Dokploy Deployment
         uses: benbristow/dokploy-deploy-action@0.2.2
         with:
-          applicationId: ${{ secrets.DOKPLOY_APP_ID }}
-          token: ${{ secrets.DOKPLOY_TOKEN }}
-          url: ${{ secrets.DOKPLOY_URL }}
+          application_id: ${{ secrets.DOKPLOY_APP_ID }}
+          api_token: ${{ secrets.DOKPLOY_TOKEN }}
+          dokploy_url: ${{ secrets.DOKPLOY_URL }}
           service_type: application

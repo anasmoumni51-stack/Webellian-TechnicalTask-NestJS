@@ -24,7 +24,7 @@ export class CatalogEntity {
     required: false,
   })
   @Column({ nullable: true })
-  description!: string | null;
+  description!: string;
 
   @ApiProperty({
     example: true,

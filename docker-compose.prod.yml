@@ -17,6 +17,7 @@ services:
       - DATABASE_PASSWORD= ${DATABASE_PASSWORD}
       - DATABASE_NAME= ${DATABASE_NAME}
       - CLIENT_URL= ${CLIENT_URL:-https://your-domain.com} # Used for CORS
+      - DATABASE_SYNC=false
     networks:
       - dokploy-network
     
