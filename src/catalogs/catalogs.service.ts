@@ -17,14 +17,14 @@ export class CatalogsService {
     private readonly catalogRepo: Repository<CatalogEntity>,
   ) {}
 
-  async findAll(paginationDto: PaginationCatalogDto): Promise<CatalogEntity[]> {                                                                                                                                                                                         
-    const { page = 1, limit = 50 } = paginationDto;                                                                                                                                                                                                                      
-    return this.catalogRepo.find({                                                                                                                                                                                                                                       
-      skip: (page - 1) * limit,                                                                                                                                                                                                                                          
-      take: limit,                                                                                                                                                                                                                                                       
-      order: { id: "ASC" },                                                                                                                                                                                                                                              
-    });                                                                                                                                                                                                                                                                  
-  }    
+  async findAll(paginationDto: PaginationCatalogDto): Promise<CatalogEntity[]> {
+    const { page = 1, limit = 50 } = paginationDto;
+    return this.catalogRepo.find({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { id: "ASC" },
+    });
+  }
 
   async findOne(id: number): Promise<CatalogEntity> {
     const catalog = await this.catalogRepo.findOne({ where: { id: id } });

@@ -22,22 +22,22 @@ export class ProductsService {
 
   // added a query parameter filter to search products by categories
   async findAll(queryProductDto: QueryProductDto): Promise<ProductEntity[]> {
-    const { page = 1, limit = 20, catalogId } = queryProductDto;                                                                                                                         
-                                                                                                                                                                                  
+    const { page = 1, limit = 20, catalogId } = queryProductDto;
+
     if (catalogId) {
-      return this.productRepo.find({ 
+      return this.productRepo.find({
         where: { catalogs: { id: catalogId } },
         skip: (page - 1) * limit,
         take: limit,
         order: { id: "ASC" },
-      });                                                                                                                                                                         
-    }                                                                                                                                                                             
-                                                                                                                                                                                  
-      return this.productRepo.find({                                                                                                                                                
-        skip: (page - 1) * limit,                                                                                                                                                   
-        take: limit,                                                                                                                                                                
-        order: { id: "ASC" },                                                                                                                                                       
-      });                                                                                                                                                                           
+      });
+    }
+
+    return this.productRepo.find({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { id: "ASC" },
+    });
   }
 
   async findOne(id: number): Promise<ProductEntity> {

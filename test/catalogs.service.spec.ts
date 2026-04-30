@@ -99,7 +99,10 @@ describe("CatalogsService", () => {
 
     it("should throw ConflictException if name already exists", async () => {
       const dto = { name: "Electronics", isActive: true };
-      mockCatalogRepository.findOne.mockResolvedValue({ id: 1, name: "Electronics" });
+      mockCatalogRepository.findOne.mockResolvedValue({
+        id: 1,
+        name: "Electronics",
+      });
 
       await expect(service.create(dto)).rejects.toThrow(ConflictException);
     });

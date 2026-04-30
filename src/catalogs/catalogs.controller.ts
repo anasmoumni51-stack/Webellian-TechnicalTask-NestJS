@@ -37,7 +37,9 @@ export class CatalogsController {
     type: [CatalogEntity],
   })
   @Get()
-  async retrieveAllCatalogs(@Query() paginationCatalogDto : PaginationCatalogDto): Promise<CatalogEntity[]> {
+  async retrieveAllCatalogs(
+    @Query() paginationCatalogDto: PaginationCatalogDto,
+  ): Promise<CatalogEntity[]> {
     return this.catalogService.findAll(paginationCatalogDto);
   }
 

@@ -1,26 +1,26 @@
-import { ProductEntity } from './product.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { ProductEntity } from "./product.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ApiProperty } from "@nestjs/swagger";
 
-@Entity('catalogs')
+@Entity("catalogs")
 export class CatalogEntity {
   @ApiProperty({
     example: 1,
-    description: 'The unique identifier of the catalog',
+    description: "The unique identifier of the catalog",
   })
   @PrimaryGeneratedColumn()
   id!: number;
 
   @ApiProperty({
-    example: 'Gadget Collection',
-    description: 'The name of the catalog',
+    example: "Gadget Collection",
+    description: "The name of the catalog",
   })
-  @Column({unique: true})
+  @Column({ unique: true })
   name!: string;
 
   @ApiProperty({
-    example: 'A collection of gadget products',
-    description: 'Description of the catalog',
+    example: "A collection of gadget products",
+    description: "Description of the catalog",
     required: false,
   })
   @Column({ nullable: true })
@@ -28,17 +28,17 @@ export class CatalogEntity {
 
   @ApiProperty({
     example: true,
-    description: 'if the catalog is currently active',
+    description: "if the catalog is currently active",
   })
   @Column({ default: true })
   isActive!: boolean;
 
   @ApiProperty({
     type: () => [ProductEntity],
-    description: 'Products associated with this catalog',
+    description: "Products associated with this catalog",
   })
   @ManyToMany(() => ProductEntity, (product) => product.catalogs, {
-    onDelete: 'CASCADE',
+    onDelete: "CASCADE",
   })
   products!: ProductEntity[];
 }

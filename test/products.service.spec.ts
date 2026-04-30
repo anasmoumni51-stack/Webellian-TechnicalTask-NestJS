@@ -78,7 +78,11 @@ describe("ProductsService", () => {
       const mockResult = [{ id: 1, name: "Phone", price: 999.0 }];
       mockProductRepo.find.mockResolvedValue(mockResult);
 
-      const result = await service.findAll({ page: 1, limit: 20, catalogId: 1 });
+      const result = await service.findAll({
+        page: 1,
+        limit: 20,
+        catalogId: 1,
+      });
       expect(result).toEqual(mockResult);
       expect(mockProductRepo.find).toHaveBeenCalledWith({
         where: { catalogs: { id: 1 } },
