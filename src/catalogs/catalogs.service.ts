@@ -8,7 +8,7 @@ import { Repository } from "typeorm";
 import { CreateCatalogDto } from "./dto/create-catalog.dto";
 import { UpdateCatalogDto } from "./dto/update-catalog.dto";
 import { CatalogEntity } from "../database/entities/catalog.entity";
-import { ProductEntity } from "../database/entities/product.entity";
+import { PaginationCatalogDto } from "./dto/pagination-catalog.dto";
 
 @Injectable()
 export class CatalogsService {
@@ -17,9 +17,14 @@ export class CatalogsService {
     private readonly catalogRepo: Repository<CatalogEntity>,
   ) {}
 
-  async findAll(): Promise<CatalogEntity[]> {
-    return await this.catalogRepo.find();
-  }
+  async findAll(paginationDto: PaginationCatalogDto): Promise<CatalogEntity[]> {                                                                                                                                                                                         
+    const { page = 1, limit = 50 } = paginationDto;                                                                                                                                                                                                                      
+    return this.catalogRepo.find({                                                                                                                                                                                                                                       
+      skip: (page - 1) * limit,                                                                                                                                                                                                                                          
+      take: limit,                                                                                                                                                                                                                                                       
+      order: { id: "ASC" },                                                                                                                                                                                                                                              
+    });                                                                                                                                                                                                                                                                  
+  }    
 
   async findOne(id: number): Promise<CatalogEntity> {
     const catalog = await this.catalogRepo.findOne({ where: { id: id } });
@@ -56,16 +61,5 @@ export class CatalogsService {
     const deletedCatalog = await this.findOne(id);
     await this.catalogRepo.delete(id);
     return deletedCatalog;
-  }
-
-  async getProducts(catalogId: number): Promise<ProductEntity[]> {
-    const catalog = await this.catalogRepo.findOne({
-      where: { id: catalogId },
-      relations: ["products"],
-    });
-    if (!catalog) {
-      throw new NotFoundException(`Catalog with ID:${catalogId} not found`);
-    }
-    return catalog.products;
   }
 }

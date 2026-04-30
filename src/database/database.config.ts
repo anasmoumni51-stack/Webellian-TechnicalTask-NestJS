@@ -12,12 +12,12 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
     return {
       type: "postgres",
       host: this.configService.get("DATABASE_HOST", "localhost"),
-      port: this.configService.get("DATABASE_PORT", 5432),
+      port: parseInt(this.configService.get("DATABASE_PORT", "5432")),
       username: this.configService.get("DATABASE_USER", "postgres"),
       password: this.configService.get("DATABASE_PASSWORD", "postgres"),
       database: this.configService.get("DATABASE_NAME", "technicaltask_db"),
       entities: [ProductEntity, CatalogEntity],
-      synchronize: this.configService.get("DATABASE_SYNC", true),
+      synchronize: this.configService.get("DATABASE_SYNC", "true") === "true",
     };
   }
 }

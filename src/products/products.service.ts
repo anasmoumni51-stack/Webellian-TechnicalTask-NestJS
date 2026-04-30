@@ -9,6 +9,7 @@ import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import { ProductEntity } from "../database/entities/product.entity";
 import { CatalogEntity } from "../database/entities/catalog.entity";
+import { QueryProductDto } from "./dto/query-product.dto";
 
 @Injectable()
 export class ProductsService {
@@ -19,8 +20,24 @@ export class ProductsService {
     private readonly catalogRepo: Repository<CatalogEntity>,
   ) {}
 
-  async findAll(): Promise<ProductEntity[]> {
-    return await this.productRepo.find();
+  // added a query parameter filter to search products by categories
+  async findAll(queryProductDto: QueryProductDto): Promise<ProductEntity[]> {
+    const { page = 1, limit = 20, catalogId } = queryProductDto;                                                                                                                         
+                                                                                                                                                                                  
+    if (catalogId) {
+      return this.productRepo.find({ 
+        where: { catalogs: { id: catalogId } },
+        skip: (page - 1) * limit,
+        take: limit,
+        order: { id: "ASC" },
+      });                                                                                                                                                                         
+    }                                                                                                                                                                             
+                                                                                                                                                                                  
+      return this.productRepo.find({                                                                                                                                                
+        skip: (page - 1) * limit,                                                                                                                                                   
+        take: limit,                                                                                                                                                                
+        order: { id: "ASC" },                                                                                                                                                       
+      });                                                                                                                                                                           
   }
 
   async findOne(id: number): Promise<ProductEntity> {
@@ -104,13 +121,6 @@ export class ProductsService {
     });
     if (!product) {
       throw new NotFoundException(`Product with ID: ${productId} not found`);
-    }
-
-    const catalog = await this.catalogRepo.findOne({
-      where: { id: catalogId },
-    });
-    if (!catalog) {
-      throw new NotFoundException(`Catalog with ID: ${catalogId} not found`);
     }
 
     const alreadyAssigned = product.catalogs.find(
