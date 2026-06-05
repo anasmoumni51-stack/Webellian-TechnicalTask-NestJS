@@ -1,12 +1,12 @@
 # -------------------------------------------------------------
 # BUILD STAGE
 # -------------------------------------------------------------
-FROM node:22-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /usr/src/app
 
-#  pnpm latest
-RUN corepack enable && corepack prepare pnpm@latest --activate
+#  pnpm 10.33.2
+RUN corepack enable && corepack prepare pnpm@10.33.2 --activate
 
 # Copy package manifests
 COPY package.json pnpm-lock.yaml ./
